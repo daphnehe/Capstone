@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='ai4ai_logo.png') }}" type="image/png">
+    <title>AI4AI Text Classifier Website</title>
+    <script>
+        function scrollToResult() {
+            var resultSection = document.getElementById("result-section");
+            if (resultSection) {
+                resultSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var flipBoxes = document.querySelectorAll(".flip-box");
+            flipBoxes.forEach(function(box) {
+                box.addEventListener("mouseover", function() {
+                    this.classList.add("flipped");
+                });
+                box.addEventListener("mouseout", function() {
+                    this.classList.remove("flipped");
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <img src="{{ url_for('static', filename='ai4ai_logo.png') }}" alt="Project Logo" class="logo">
+            <h1>AI4AI Text Classifier</h1>
+            <div class="nav-links">
+                <a href="https://b2park17.wixsite.com/aicheckmate" target="_blank">Group Website</a>
+                <a href="https://github.com/daphnehe/Capstone" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </nav>
+    <section class="overview">
+        <div class="flip-box">
+            <div class="flip-box-inner">
+                <div class="flip-box-front">
+                    <div class="box">
+                        <img src="{{ url_for('static', filename='objective_image1.png') }}" alt="Problem Icon" class="icon">
+                        <h2>Problem</h2>
+                    </div>
+                </div>
+                <div class="flip-box-back">
+                    <div class="box">
+                        <p> As AI advances, distinguishing between genuine human-generated content and AI-generated
+                            misinformation becomes increasingly challenging. The rise of sophisticated fake news threatens
+                            the integrity of information dissemination across digital platforms. This classifier addresses
+                            these challenges by accurately identifying the origin and authenticity of texts, aiding in the
+                            fight against misinformation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="image-top-right">
+            <img src="{{ url_for('static', filename='problem_image.png') }}" alt="Problem Visual">
+        </div>
+        <div class="flip-box">
+            <div class="flip-box-inner">
+                <div class="flip-box-front">
+                    <div class="box">
+                        <img class="svm_model_icon" src="{{ url_for('static', filename='svm_model_icon.png') }}" alt="svm_model_icon" class="icon">
+                        <h2>What is an SVM Model?</h2>
+                    </div>
+                </div>
+                <div class="flip-box-back">
+                    <div class="box">
+                        <p>Support Vector Machine (SVM) is a powerful machine learning algorithm well-suited for classification tasks. In our project, we used SVM to classify texts into four categories: Human Real, Human Fake, Machine Real, and Machine Fake. The SVM model works by finding the optimal hyperplane that separates different classes based on their features.</p>
+                        <p>We trained the SVM model on a dataset of preprocessed text, allowing it to learn the distinct characteristics of each category. The model was then able to accurately classify new texts by determining which side of the hyperplane they fall on. This approach provided a robust solution for detecting AI-generated content and distinguishing it from human-generated text effectively.</p>
+                 </div>
+                </div>
+            </div>
+        </div>
+        <div class="flip-box">
+            <div class="flip-box-inner">
+                <div class="flip-box-front">
+                    <div class="box">
+                        <img  class="objective_icon" src="{{ url_for('static', filename='objective_icon.png') }}" alt="objective_icon" class="icon">
+                        <h2>Objective</h2>
+                    </div>
+                </div>
+                <div class="flip-box-back">
+                    <div class="box">
+                        <p>Our objective of the project was to evaluated the effectiveness of various machine learning models in
+                            identifying texts/articles as Human Real, Human Fake, Machine Real, or Machine Fake.
+                            After comparing the performance of various models,
+                            we found that the SVM model performed the best with high accuracies. And from the findings,
+                            this classifier uses the SVM model to deliver accurate text classification.</p>
+                        <p>By reliably determining the origin and authenticity of texts, this classifier aims to mitigate the spread of misinformation and enhance the credibility of information dissemination.</p>
+                        <p>For further information about our project and research, please visit the links in the navigation bar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="classifier">
+        <h2>Try the SVM Classifier</h2>
+        <p>Enter your text or article below to check if it is written by a human or a machine, and further, whether it is real or fake:</p>
+        <form method="post" id="classifier-form" onsubmit="scrollToResult()">
+            <textarea name="text" rows="8" cols="50" placeholder="Enter text here..."></textarea>
+            <button type="submit">Classify Text</button>
+        </form>
+        {% if error %}
+            <div class="error">
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+        {% if prediction %}
+            <div id="result-section" class="result">
+                <h3>Classification Result:</h3>
+                <p>{{prediction}}</p>
+                <div class="result-content">
+                    <p>{{ message }}</p>
+                    {% if 'Human: Real' in prediction %}
+                        <img src="{{ url_for('static', filename='human_real_icon.png') }}" alt="Human Real Icon" class="result-icon">
+                    {% elif 'Human: Fake' in prediction %}
+                        <img src="{{ url_for('static', filename='human_fake_icon.png') }}" alt="Human Fake Icon" class="result-icon">
+                    {% elif 'Machine: Real' in prediction %}
+                        <img src="{{ url_for('static', filename='machine_real_icon.png') }}" alt="Machine Real Icon" class="result-icon">
+                    {% elif 'Machine: Fake' in prediction %}
+                        <img src="{{ url_for('static', filename='machine_fake_icon.png') }}" alt="Machine Fake Icon" class="result-icon">
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </section>
+    <footer>
+        <p>© 2024 UW INFO492 Capstone Project</p>
+    </footer>
+    <script>
+        document.getElementById('classifier-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            }).then(function(response) {
+                return response.text();
+            }).then(function(html) {
+                document.open();
+                document.write(html);
+                document.close();
+                scrollToResult();
+            }).catch(function(error) {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
